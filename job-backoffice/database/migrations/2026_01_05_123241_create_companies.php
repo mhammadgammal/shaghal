@@ -11,11 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_categories', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('address');
+            $table->string('industry');
+            $table->string('website')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            // Relationships
+            $table->uuid('ownerId');
+            $table->foreign('ownerId')->references('id')->on('users')->restrictOnDelete();
         });
     }
 
@@ -24,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_categories');
+        Schema::dropIfExists('companies');
     }
 };
