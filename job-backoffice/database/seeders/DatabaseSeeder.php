@@ -75,8 +75,8 @@ class DatabaseSeeder extends Seeder
                 'location' => $jobVacancy['location'],
                 'salary' => $jobVacancy['salary'],
                 'type' => $jobVacancy['type'],
-                'company_id' => $company->id,
-                'category_id' => $category->id,
+                'companyId' => $company->id,
+                'jobCategoryId' => $category->id,
             ]);
         }
     }
