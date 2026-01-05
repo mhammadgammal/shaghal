@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job-applications', function (Blueprint $table) {
+        Schema::create('jobـapplications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->enum('status', ['pending', 'reviewed', 'accepted', 'rejected'])->default('pending');
             $table->float('aiGeneratedScore', 2)->default(0);
@@ -21,7 +21,7 @@ return new class extends Migration
 
             // Relationships
             $table->uuid('jobVacancyId');
-            $table->foreign('jobVacancyId')->references('id')->on('job-vacancies')->restrictOnDelete();
+            $table->foreign('jobVacancyId')->references('id')->on('jobـvacancies')->restrictOnDelete();
 
             $table->uuid('resumeId');
             $table->foreign('resumeId')->references('id')->on('resumes')->restrictOnDelete();
