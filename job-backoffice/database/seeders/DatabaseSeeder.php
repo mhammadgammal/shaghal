@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\JobApplication;
 use App\Models\JobCategory;
 use App\Models\JobVacancy;
+use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -31,6 +33,7 @@ class DatabaseSeeder extends Seeder
 
         // Seed data to test with
         $jsonData = json_decode(file_get_contents(database_path('data/job_data.json')), true);
+        $jsonApplicationsData = json_decode(file_get_contents(database_path('data/job_applications.json')), true);
 
         // create job categories
         foreach ($jsonData['jobCategories'] as $category) {
@@ -77,6 +80,42 @@ class DatabaseSeeder extends Seeder
                 'type' => $jobVacancy['type'],
                 'jobCategoryId' => $category->id,
             ]);
+        }
+
+        foreach ($jsonApplicationsData['jobApplications'] as $application) {
+            $jobVacancy = JobVacancy::inRandomOrder()->first();
+
+            $applicant = User::firstOrCreate([
+                'email' => fake()->unique()->safeEmail(),
+            ], [
+                'name' => fake()->name(),
+                'password' => Hash::make('12345678'),
+                'role' => 'job-seeker',
+                'email_verified_at' => now(),
+            ]);
+            $resume = Resume::create(
+                [
+                    'userId' => $applicant->id,
+                    'filename' => $application['resume']['filename'],
+                    'fileUri' => $application['resume']['fileUri'],
+                    'summary' => $application['resume']['summary'],
+                    'contactDetails' => $application['resume']['contactDetails'],
+                    'education' => $application['resume']['education'],
+                    'experience' => $application['resume']['experience'],
+                    'skills' => $application['resume']['skills'],
+                ]
+            );
+
+            JobApplication::create(
+                [
+                    'userId' => $applicant->id,
+                    'jobVacancyId' => $jobVacancy->id,
+                    'resumeId' => $resume->id,
+                    'status' => $application['status'],
+                    'aiGeneratedScore' => $application['aiGeneratedScore'],
+                    'aiGeneratedFeedback' => $application['aiGeneratedFeedback'],
+                ]
+            );
         }
     }
 }
