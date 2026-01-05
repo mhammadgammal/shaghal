@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jobـapplications', function (Blueprint $table) {
+        Schema::create('job_applications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->enum('status', ['pending', 'reviewed', 'accepted', 'rejected'])->default('pending');
             $table->float('aiGeneratedScore', 2)->default(0);
