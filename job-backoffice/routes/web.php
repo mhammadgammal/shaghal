@@ -9,14 +9,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/companies', [CompanyController::class, 'index'])->middleware(['auth', 'verified'])->name('companies');
-Route::get('/job-categories', [JobCategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('job-categories');
-Route::get('/job-vacancies', [JobVacancyController::class, 'index'])->middleware(['auth', 'verified'])->name('job-vacancies');  
-Route::get('/job-applications', [JobApplicationController::class, 'index'])->middleware(['auth', 'verified'])->name('job-applications');
-Route::get('/users', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::resource('/job-categories', JobCategoryController::class);
+    Route::resource('/companies', CompanyController::class);
+    Route::resource('/job-vacancies', JobVacancyController::class);
+    Route::resource('/job-applications', JobApplicationController::class);
+    Route::resource('/users', UserController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

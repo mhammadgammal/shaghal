@@ -11,19 +11,19 @@
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             Dashboard
         </x-nav-link>
-        <x-nav-link :href="route('companies')" :active="request()->routeIs('companies')">
+        <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
             Companies
         </x-nav-link>
-        <x-nav-link :href="route('job-applications')" :active="request()->routeIs('job-applications')">
+        <x-nav-link :href="route('job-applications.index')" :active="request()->routeIs('job-applications.index')">
             Job Applications
         </x-nav-link>
-        <x-nav-link :href="route('job-categories')" :active="request()->routeIs('job-categories')">
+        <x-nav-link :href="route('job-categories.index')" :active="request()->routeIs('job-categories.index')">
             Job Categories
         </x-nav-link>
-        <x-nav-link :href="route('job-vacancies')" :active="request()->routeIs('job-vacancies')">
+        <x-nav-link :href="route('job-vacancies.index')" :active="request()->routeIs('job-vacancies.index')">
             Job Vacancies
         </x-nav-link>
-        <x-nav-link :href="route('users')" :active="request()->routeIs('users')">
+        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
             Users
         </x-nav-link>
 
