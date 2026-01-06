@@ -5,13 +5,34 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("Job Category") }}
-                </div>
-            </div>
+    <div class="overflow-x-auto p-6">
+
+        <!-- job category table -->
+        <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow mt-4 bg-white">
+            <thead>
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Category Name</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($categories as $category)
+                <tr class="border-b">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"> {{ $category->name }} </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                        <a href="{{ route('job-categories.edit', $category->id) }}" class="btn btn-primary">✍️ Edit</a>
+                        <form action="{{ route('job-categories.destroy', $category->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger text-red-500">🗃️ Archive</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div>
+            {{ $categories->links() }}
         </div>
     </div>
 </x-app-layout>
