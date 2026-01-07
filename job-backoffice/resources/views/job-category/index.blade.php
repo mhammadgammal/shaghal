@@ -6,7 +6,13 @@
     </x-slot>
 
     <div class="overflow-x-auto p-6">
-
+        
+        <div class="flex justify-end mb-4">
+            <!-- add category button -->
+            <a href="{{ route('job-categories.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                Add Category
+            </a>
+        </div>
         <!-- job category table -->
         <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow mt-4 bg-white">
             <thead>
