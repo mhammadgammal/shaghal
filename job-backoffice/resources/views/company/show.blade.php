@@ -20,6 +20,9 @@
                     Company Information
                 </h3>
                 <p>
+                    <strong>Owner:</strong> {{ $company->owner->name }}
+                </p>
+                <p>
                     <strong>Address:</strong> {{ $company->address }}
                 </p>
                 <p>
@@ -99,7 +102,8 @@
                     <table class="min-w-full bg-gray-50 rounded-lg shadow">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Applicant Name </th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Applicant Name
+                                </th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Job Title </th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Status </th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Actions </th>
