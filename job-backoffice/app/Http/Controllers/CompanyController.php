@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use App\Models\User;
+
 class CompanyController extends Controller
 {
     /**
@@ -27,7 +29,8 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.create');
+        $industries = ['Technology', 'Finance', 'HealthCare', 'Education', 'Retail', 'Manufacturing', 'Energy', 'Entertainment', 'Sports', 'Real Estate'];
+        return view('company.create', compact('industries'));
     }
 
     /**
@@ -36,8 +39,25 @@ class CompanyController extends Controller
     public function store(CompanyCreateRequest $request)
     {
         $validated = $request->validated();
+        $owner = User::create([
+            'name' => $validated['ownerName'],
+            'email' => $validated['ownerEmail'],
+            'password' => $validated['ownerPassword'],
+            'role' => 'company-owner',
+        ]);
 
-        Company::create($validated);
+        // return error if owner is not created
+        if (!$owner) {
+            return redirect()->route('companies.create')->with('error', 'Owner not created');
+        }
+
+        Company::create([
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+            'industry' => $validated['industry'],
+            'website' => $validated['website'],
+            'ownerId' => $owner->id,
+        ]);
 
         return redirect()->route('companies.index')->with('success', 'Company created successfully');
     }
@@ -48,7 +68,7 @@ class CompanyController extends Controller
     public function show(string $id)
     {
         $company = Company::findOrFail($id);
-        
+
         return view('company.show', compact('company'));
     }
 
