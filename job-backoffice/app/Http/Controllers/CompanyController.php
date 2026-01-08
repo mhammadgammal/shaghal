@@ -47,7 +47,9 @@ class CompanyController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $company = Company::findOrFail($id);
+        
+        return view('company.show', compact('company'));
     }
 
     /**
@@ -56,7 +58,7 @@ class CompanyController extends Controller
     public function edit(string $id)
     {
         $company = Company::findOrFail($id);
-        return view('job-category.edit', compact('company'));
+        return view('company.edit', compact('company'));
     }
 
     /**

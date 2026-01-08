@@ -52,7 +52,9 @@
             <tbody>
                 @forelse ($companies as $company)
                     <tr class="border-b">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"> {{ $company->name }}
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                            <a href="{{ route('companies.show', $company->id) }}" class="text-blue-500 hover:text-blue-700 underline"> {{ $company->name }}
+                            </a>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                             {{ $company->address }}
@@ -69,18 +71,18 @@
                                     class="d-inline">
                                     @csrf
                                     @method('PUT')
-                                <button type="submit" class="btn btn-success text-green-500">♻️ Restore</button>
-                            </form>
-                        @else
-                            <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary">✍️
-                                Edit</a>
-                            <form action="{{ route('companies.destroy', $company->id) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger text-red-500">🗃️ Archive</button>
-                            </form>
-                        @endif
+                                    <button type="submit" class="btn btn-success text-green-500">♻️ Restore</button>
+                                </form>
+                            @else
+                                <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary">✍️
+                                    Edit</a>
+                                <form action="{{ route('companies.destroy', $company->id) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger text-red-500">🗃️ Archive</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty
