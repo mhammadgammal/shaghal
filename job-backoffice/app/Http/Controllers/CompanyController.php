@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Company;
+use App\Http\Requests\CompanyCreateRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("company.index");
+        $query = Company::latest();
+        if ($request->input("archived") == true) {
+            $query->onlyTrashed();
+        }
+
+        $companies = $query->paginate(10)->onEachSide(1);
+        return view('company.index', compact('companies'));
     }
 
     /**
@@ -19,15 +27,19 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return view('company.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyCreateRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        Company::create($validated);
+
+        return redirect()->route('companies.index')->with('success', 'Company created successfully');
     }
 
     /**
@@ -43,15 +55,21 @@ class CompanyController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $company = Company::findOrFail($id);
+        return view('job-category.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CompanyUpdateRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        $company = Company::findOrFail($id);
+
+        $company->update($validated);
+
+        return redirect()->route('job-categories.index')->with('success', 'Job Category updated successfully');
     }
 
     /**
@@ -59,6 +77,19 @@ class CompanyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $company = Company::findOrFail($id);
+
+        $company->delete();
+
+        return redirect()->route('job-categories.index')->with('success', 'Job Category archived successfully');
+    }
+
+    public function restore(string $id)
+    {
+        $company = Company::withTrashed()->findOrFail($id);
+
+        $company->restore();
+
+        return redirect()->route('job-categories.index', ['archived' => true])->with('success', 'Job Category restored successfully');
     }
 }
