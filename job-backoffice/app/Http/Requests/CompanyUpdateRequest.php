@@ -22,10 +22,14 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:companies,name',
+            'name' => 'required|unique:companies,name,' . $this->route('company'),
             'address' => 'required|string|max:255',
             'industry' => 'required|string|max:255',
-            'website' => 'nullable|string|url|max:255',
+            'website' => 'nullable|url|max:255',
+
+            //owner
+            'ownerName' => 'required|string|max:255',
+            'ownerPassword' => 'nullable|string|min:8',
         ];
     }
 
@@ -41,6 +45,11 @@ class CompanyUpdateRequest extends FormRequest
             'industry.max' => 'Company industry must be less than 255 characters',
             'website.url' => 'Company website must be a valid URL',
             'website.max' => 'Company website must be less than 255 characters',
+
+            //owner
+            'ownerName.required' => 'Owner name is required',
+            'ownerName.max' => 'Owner name must be less than 255 characters',
+            'ownerPassword.min' => 'Owner password must be at least 8 characters',
         ];
     }
 }

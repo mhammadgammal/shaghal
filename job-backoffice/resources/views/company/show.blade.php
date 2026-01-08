@@ -37,7 +37,7 @@
 
             {{-- Company Actions --}}
             <div class="flex justify-end space-x-4 mb-4">
-                <a href="{{ route('companies.edit', $company->id) }}"
+                <a href="{{ route('companies.edit', ['company' => $company->id, 'redirectTo' => 'show']) }}"
                     class="btn btn-primary bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-md">
                     Edit</a>
                 <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="d-inline">
