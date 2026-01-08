@@ -124,7 +124,7 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return redirect()->route('job-categories.index')->with('success', 'Job Category archived successfully');
+        return redirect()->route('companies.index')->with('success', 'Company archived successfully');
     }
 
     public function restore(string $id)
@@ -133,6 +133,6 @@ class CompanyController extends Controller
 
         $company->restore();
 
-        return redirect()->route('job-categories.index', ['archived' => true])->with('success', 'Job Category restored successfully');
+        return redirect()->route('companies.index', ['archived' => true])->with('success', 'Company restored successfully');
     }
 }
