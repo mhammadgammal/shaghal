@@ -54,7 +54,7 @@
                             @if ($isArchived)
                                 <span class="text-gray-500">{{ $vacancy->title }}</span>
                             @else
-                                <a href="{{ route('companies.show', $vacancy->id) }}"
+                                <a href="{{ route('job-vacancies.show', $vacancy->id) }}"
                                     class="text-blue-500 hover:text-blue-700 underline"> {{ $vacancy->title }}
                                 </a>
                             @endIf
