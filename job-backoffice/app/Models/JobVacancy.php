@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\JobCategory;
-use App\Models\Company;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobVacancy extends Model
 {
@@ -52,6 +50,6 @@ class JobVacancy extends Model
 
     public function jobApplications()
     {
-        return $this->hasMany(JobApplication::class, 'jobApplicationId', 'id');
+        return $this->hasMany(JobApplication::class, 'jobVacancyId', 'id');
     }
 }
