@@ -22,22 +22,6 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -69,5 +53,11 @@ class JobApplicationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function restore(string $id)
+    {
+        $application = JobApplication::onlyTrashed()->findOrFail($id);
+        $application->restore();
+        return redirect()->back();
     }
 }
