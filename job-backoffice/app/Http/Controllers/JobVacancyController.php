@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\JobVacancyCreateRequest;
+use App\Http\Requests\JobVacancyUpdateRequest;
 use App\Models\Company;
 use App\Models\JobCategory;
 use App\Models\JobVacancy;
@@ -73,15 +74,31 @@ class JobVacancyController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $fromWhere = request()->query('from', 'index');
+        $vacancy = JobVacancy::findOrFail($id);
+        $companies = Company::latest()->get();
+        $categories = JobCategory::latest()->get();
+
+        $jobTypes = $this->jobTypes;
+
+        return view('job-vacancy.edit', compact('vacancy', 'jobTypes', 'companies', 'categories', 'fromWhere'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(JobVacancyUpdateRequest $request, string $id)
     {
-        //
+
+        $validated = $request->validated();
+
+        $vacancy = JobVacancy::findOrFail($id);
+        $vacancy->update($validated);
+
+        if ($request->input('from_where') === 'show') {
+            return redirect()->route('job-vacancies.show', $id)->with('success', 'Job vacancy updated successfully.');
+        }
+        return redirect()->route('job-vacancies.index')->with('success', 'Job vacancy updated successfully.');
     }
 
     /**
