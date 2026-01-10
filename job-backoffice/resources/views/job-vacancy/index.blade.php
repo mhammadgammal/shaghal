@@ -84,7 +84,7 @@
                                 <a href="{{ route('job-vacancies.edit', ['job_vacancy' => $vacancy->id, 'redirectTo' => 'list']) }}"
                                     class="btn btn-primary">✍️
                                     Edit</a>
-                                <form action="{{ route('companies.destroy', $vacancy->id) }}" method="POST"
+                                <form action="{{ route('job-vacancies.destroy', $vacancy->id) }}" method="POST"
                                     class="d-inline">
                                     @csrf
                                     @method('DELETE')
