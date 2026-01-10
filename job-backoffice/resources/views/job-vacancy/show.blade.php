@@ -71,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($vacancy->jobApplications as $application)
+                            @forelse ($vacancy->jobApplications as $application)
                                 <tr>
                                     <td class="px-6 py-4">
                                         {{ $application->user->name }}
@@ -87,7 +87,13 @@
                                             class="text-blue-600 underline">View</a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                        No applications found.
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
