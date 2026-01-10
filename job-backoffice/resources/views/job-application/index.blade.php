@@ -88,7 +88,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="2" class="text-center py-4">No vacancies found</td>
+                        <td colspan="2" class="text-center py-4">No Applications found</td>
                     </tr>
                 @endforelse
             </tbody>
