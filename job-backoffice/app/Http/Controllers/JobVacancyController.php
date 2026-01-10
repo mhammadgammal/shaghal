@@ -74,7 +74,7 @@ class JobVacancyController extends Controller
      */
     public function edit(string $id)
     {
-        $fromWhere = request()->query('from', 'index');
+        $fromWhere = request()->query('redirectTo', 'index');
         $vacancy = JobVacancy::findOrFail($id);
         $companies = Company::latest()->get();
         $categories = JobCategory::latest()->get();
