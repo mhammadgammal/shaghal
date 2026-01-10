@@ -45,7 +45,7 @@
                     <tr class="border-b">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                             @if ($isArchived)
-                                <span class="text-gray-500">{{ $application->user->name  }}</span>
+                                <span class="text-gray-500">{{ $application->user->name }}</span>
                             @else
                                 <a href="{{ route('job-applications.show', $application->id) }}"
                                     class="text-blue-500 hover:text-blue-700 underline"> {{ $application->user->name }}
@@ -58,8 +58,11 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                             {{ $application->jobVacancy->company->name }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                            {{ $application->status }}
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                            <span
+                                class="@if ($application->status == 'accepted') text-green-500 @elseif ($application->status == 'rejected') text-red-500 @else  text-gray-500 @endif">
+                                {{ $application->status }}
+                            </span>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">

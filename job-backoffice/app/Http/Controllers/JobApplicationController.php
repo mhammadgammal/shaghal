@@ -17,7 +17,7 @@ class JobApplicationController extends Controller
             $query->onlyTrashed();
         }
         $applications = $query->paginate(10)->onEachSide(1);
-        
+
         return view("job-application.index", compact("applications"));
     }
 
@@ -32,19 +32,17 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $application = JobApplication::findOrFail($id);
+
+        $application->update([
+            'status' => $request->input('status')
+        ]);
+
+        return redirect()->route('job-applications.index')->with('success', 'Application status updated successfully');
     }
 
     /**

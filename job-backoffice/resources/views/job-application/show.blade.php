@@ -1,5 +1,5 @@
 @php
-    $isResume = request()->input('tab') == 'resume';
+    $isResume = request()->input('tab') == 'resume' || request()->input('tab') == null;
     $isAiFeedback = request()->input('tab') == 'ai-feedback';
 @endphp
 
@@ -38,13 +38,9 @@
                 </p>
             </div>
 
-            {{-- Vacancy Actions --}}
+            {{-- Application Actions --}}
             <div class="flex justify-end space-x-4 mb-4">
-                <a href="{{ route('job-applications.edit', $application->id) }}"
-                    class="btn btn-primary bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-md">
-                    Edit</a>
-                <form action="{{ route('job-applications.destroy', $application->id) }}" method="POST"
-                    class="d-inline">
+                <form action="{{ route('job-applications.destroy', $application->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
@@ -124,6 +120,26 @@
                     </table>
                 </div>
             </div>
+
+
+        </div>
+        <div class="flex justify-start space-x-4 mt-10">
+            <form
+                action="{{ route('job-applications.update', ['job_application' => $application->id, 'status' => 'accepted']) }}"
+                method="POST" class="btn btn-primary bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-md">
+                @csrf
+                @method('PUT')
+                <button type="submit">
+                    Accept</button>
+            </form>
+            <form
+                action="{{ route('job-applications.update', ['job_application' => $application->id, 'status' => 'rejected']) }}"
+                method="POST" class="btn btn-danger bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md">
+                @csrf
+                @method('PUT')
+                <button type="submit">
+                    Reject</button>
+            </form>
         </div>
     </div>
 </x-app-layout>
