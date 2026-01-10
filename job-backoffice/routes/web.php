@@ -9,7 +9,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::resource('/job-categories', JobCategoryController::class);
@@ -17,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/companies', CompanyController::class);
     Route::put('/companies/{id}/restore', [CompanyController::class, 'restore'])->name('companies.restore');
     Route::resource('/job-vacancies', JobVacancyController::class);
+    Route::put('/job-vacancies/{id}/restore', [JobVacancyController::class, 'restore'])->name('job-vacancies.restore');
     Route::resource('/job-applications', JobApplicationController::class);
     Route::resource('/users', UserController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,4 +24,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
