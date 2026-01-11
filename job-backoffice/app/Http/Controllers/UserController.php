@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -11,23 +14,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
-    }
+        $query = User::latest();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        if (request()->input('archived')) {
+            $query->onlyTrashed();
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        $users = $query->paginate(10)->onEachSide(1);
+        return view('user.index', compact('users'));
     }
 
     /**
@@ -43,15 +37,28 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $validated = $request->validated();
+
+        if (!empty($validated['password'])) {
+            $user->update([
+                'password' => Hash::make($validated['password']), // will be hashed by model cast
+            ]);
+
+            return redirect()->route('users.index')->with('success', 'User password updated successfully');
+        }
+
+        return redirect()->back()->with('info', 'No changes made');
     }
 
     /**
@@ -59,6 +66,17 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User archived successfully');
+    }
+
+    public function restore(string $id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+
+        return redirect()->route('users.index')->with('success', 'User restored successfully');
     }
 }

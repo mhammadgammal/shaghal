@@ -20,9 +20,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('/job-applications', JobApplicationController::class);
     Route::put('/job-applications/{id}/restore', [JobApplicationController::class, 'restore'])->name('job-applications.restore');
     Route::resource('/users', UserController::class);
+    Route::put('/users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
