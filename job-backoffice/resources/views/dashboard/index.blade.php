@@ -1,3 +1,8 @@
+@php
+    $activeUsers = $analytics['activeUsers'] ?? 0;
+    $totalJobs = $analytics['totalJobs'] ?? 0;
+    $totalApplications = $analytics['totalApplications'] ?? 0;
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,7 +17,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900">{{ __('Active Users') }}</h3>
-                    <p class="text-3xl font-bold text-indigo-600">100</p>
+                    <p class="text-3xl font-bold text-indigo-600">{{ $activeUsers }}</p>
                     <p class="text-sm text-gray-500"> Last 30 days </p>
                 </div>
             </div>
@@ -20,7 +25,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900">{{ __('Total Jobs') }}</h3>
-                    <p class="text-3xl font-bold text-indigo-600">100</p>
+                    <p class="text-3xl font-bold text-indigo-600">{{ $totalJobs }}</p>
                     <p class="text-sm text-gray-500"> All Time </p>
                 </div>
             </div>
@@ -28,7 +33,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900">{{ __('Total Application') }}</h3>
-                    <p class="text-3xl font-bold text-indigo-600">100</p>
+                    <p class="text-3xl font-bold text-indigo-600">{{ $totalApplications }}</p>
                     <p class="text-sm text-gray-500"> All Time </p>
                 </div>
             </div>
@@ -49,16 +54,15 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200">
-                    <tr>
-                        <td class="py-4 whitespace-nowrap">Software Engineer</td>
-                        <td class="py-4 whitespace-nowrap">Tech Corp</td>
-                        <td class="py-4 whitespace-nowrap">150</td>
-                    </tr>
-                    <tr>
-                        <td class="py-4 whitespace-nowrap">Software Engineer</td>
-                        <td class="py-4 whitespace-nowrap">Tech Corp</td>
-                        <td class="py-4 whitespace-nowrap">150</td>
-                    </tr>
+
+                    @foreach ($mostAppliedJobs as $job)
+                        <tr>
+                            <td class="py-4 whitespace-nowrap">{{ $job->title }}</td>
+                            <td class="py-4 whitespace-nowrap">{{ $job->company->name }}</td>
+                            <td class="py-4 whitespace-nowrap">{{ $job->totalCount }}</td>
+                        </tr>
+                    @endforeach
+
                 </tbody>
             </table>
         </div>
@@ -80,18 +84,16 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200">
-                    <tr>
-                        <td class="py-4 whitespace-nowrap">Software Engineer</td>
-                        <td class="py-4 whitespace-nowrap">5</td>
-                        <td class="py-4 whitespace-nowrap">150</td>
-                        <td class="py-4 whitespace-nowrap">50%</td>
-                    </tr>
-                    <tr>
-                        <td class="py-4 whitespace-nowrap">Software Engineer</td>
-                        <td class="py-4 whitespace-nowrap">5</td>
-                        <td class="py-4 whitespace-nowrap">150</td>
-                        <td class="py-4 whitespace-nowrap">50%</td>
-                    </tr>
+                    @foreach ($conversionRates as $rate)
+                        <tr>
+                            <td class="py-4 whitespace-nowrap">{{ $rate->title }}</td>
+                            <td class="py-4 whitespace-nowrap">{{ $rate->viewCount }}</td>
+                            <td class="py-4 whitespace-nowrap">{{ $rate->totalCount }}</td>
+                            <td class="py-4 whitespace-nowrap">{{ $rate->conversion }}%</td>
+                        </tr>
+                    @endforeach
+
+
                 </tbody>
             </table>
         </div>
