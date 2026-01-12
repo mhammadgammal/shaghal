@@ -1,0 +1,22 @@
+{
+    "name": "job/shared",
+    "description": "This is package to maange system models",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^12.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "mhammadgammal",
+            "email": "mhammadgamal17@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
