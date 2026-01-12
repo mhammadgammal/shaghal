@@ -26,6 +26,9 @@
                     <strong>Address:</strong> {{ $company->address }}
                 </p>
                 <p>
+                    <strong>Email:</strong> {{ $company->owner->email }}
+                </p>
+                <p>
                     <strong>Industry:</strong> {{ $company->industry }}
                 </p>
                 <p>
