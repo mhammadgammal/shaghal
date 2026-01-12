@@ -1,5 +1,6 @@
 @php
     $isArchived = request()->has('archived') && request()->input('archived') == true;
+    $isAdmin = auth()->guard()->user()->role === 'admin';
 @endphp
 <x-app-layout>
     <x-slot name="header">
@@ -40,7 +41,9 @@
             <thead>
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Title</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Company </th>
+                    @if ($isAdmin)
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Company </th>
+                    @endif
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Location</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Type</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600"> Salary</th>
@@ -59,9 +62,11 @@
                                 </a>
                             @endIf
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                            {{ $vacancy->company->name }}
-                        </td>
+                        @if ($isAdmin)
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                {{ $vacancy->company->name }}
+                            </td>
+                        @endif
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                             {{ $vacancy->location }}
                         </td>
