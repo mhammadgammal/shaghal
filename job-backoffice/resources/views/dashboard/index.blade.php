@@ -2,6 +2,9 @@
     $activeUsers = $analytics['activeUsers'] ?? 0;
     $totalJobs = $analytics['totalJobs'] ?? 0;
     $totalApplications = $analytics['totalApplications'] ?? 0;
+    $mostAppliedJobs = $analytics['mostAppliedJobs'] ?? [];
+    $conversionRates = $analytics['conversionRates'] ?? [];
+    $isAdmin = auth()->guard()->user()->role === 'admin';
 @endphp
 <x-app-layout>
     <x-slot name="header">
@@ -48,7 +51,9 @@
                 <thead>
                     <tr class="text-left">
                         <th>Job Title</th>
-                        <th>Company</th>
+                        @if ($isAdmin)
+                            <th>Company</th>
+                        @endif
                         <th>Total Applications</th>
                     </tr>
                 </thead>
@@ -58,7 +63,9 @@
                     @foreach ($mostAppliedJobs as $job)
                         <tr>
                             <td class="py-4 whitespace-nowrap">{{ $job->title }}</td>
-                            <td class="py-4 whitespace-nowrap">{{ $job->company->name }}</td>
+                            @if ($isAdmin)
+                                <td class="py-4 whitespace-nowrap">{{ $job->company->name }}</td>
+                            @endIf
                             <td class="py-4 whitespace-nowrap">{{ $job->totalCount }}</td>
                         </tr>
                     @endforeach
