@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'role:admin,company-owner')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::resource('/job-categories', JobCategoryController::class);
     Route::put('/job-categories/{id}/restore', [JobCategoryController::class, 'restore'])->name('job-categories.restore');
