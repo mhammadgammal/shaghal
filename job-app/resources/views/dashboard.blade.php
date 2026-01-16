@@ -52,7 +52,8 @@
                     {{-- Job Item --}}
                     <div class="border border-white/10 p-4 flex justify-between items-center">
                         <div>
-                            <a class="text-lg font-semibold text-blue-400 hover:underline"> {{ $job->title }} </a>
+                            <a href="{{ route('job-vacancies.show', $job->id) }}"
+                                class="text-lg font-semibold text-blue-400 hover:underline"> {{ $job->title }} </a>
                             <p class="text-sm text-white/70"> {{ $job->company->name }} • {{ $job->location }}</p>
                             <p class="text-sm text-white/70"> {{ '$' . number_format($job->salary) }} / year</p>
                         </div>
