@@ -28,7 +28,8 @@
                     </div>
                     <div class="flex items-center justify-end">
                         <a class="justify-center bg-gradient-to-r from-indigo-500 to-rose-500 text-white px-4 py-2 rounded-lg transition hover:from-indigo-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            href="{{ $jobVacancy->application_link }}" target="_blank" rel="noopener noreferrer">
+                            href="{{ route('job-vacancies.apply', ['id' => $jobVacancy->id]) }}" target="_blank"
+                            rel="noopener noreferrer">
                             Apply Now
                         </a>
                     </div>
