@@ -29,7 +29,8 @@
                 </div>
             </div>
 
-            <form action="{{ route('job-vacancies.process-application', ['id' => $jobVacancy->id]) }}" method="POST">
+            <form action="{{ route('job-vacancies.process-application', ['id' => $jobVacancy->id]) }}" method="POST"
+                enctype="multipart/form-data" class="mt-6">
                 @csrf
 
                 @if ($errors->any())

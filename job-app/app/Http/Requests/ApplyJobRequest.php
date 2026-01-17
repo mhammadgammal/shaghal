@@ -22,7 +22,7 @@ class ApplyJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'resume_fle' => 'required|file|mimes:pdf|max:5120', // Max 5MB
+            'resume_file' => 'required|file|mimes:pdf|max:5120', // Max 5MB
         ];
     }
 
