@@ -32,6 +32,15 @@
             <form action="{{ route('job-vacancies.process-application', ['id' => $jobVacancy->id]) }}" method="POST">
                 @csrf
 
+                @if ($errors->any())
+                    <div class="mb-4">
+                        <ul class="list-disc list-inside text-red-500">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 {{-- resume selection --}}
                 <div>
                     <h3 class="text-xl font-semibold text-white">Choose your Resume</h3>
