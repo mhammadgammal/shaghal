@@ -26,6 +26,34 @@ class JobVacancyController extends Controller
 
     public function processApplication(ApplyJobRequest $request, string $id)
     {
+        $resumeId = $request->input('resume_option') === 'new_resume'
+            ? $this->processNewResume($request, $id)
+            : $request->input('resume_option');
+
+        JobApplication::create([
+            'jobVacancyId' => $id,
+            'userId' => auth()->guard()->user()->id,
+            'resumeId' => $resumeId,
+            'aiGeneratedScore' => 0,
+            'aiGeneratedFeedback' => '',
+        ]);
+        return redirect()->route('job-applications.index')->with('success', 'Your application has been submitted successfully.');
+    }
+
+    public function testOpenAI()
+    {
+        $response = OpenAI::chat()->create([
+            'model' => 'gpt-3.5-turbo', // or 'gpt-4'
+            'messages' => [
+                ['role' => 'user', 'content' => 'Hello!'],
+            ],
+        ]);
+
+        echo $response['choices'][0]['message']['content'];
+    }
+
+    private function processNewResume(ApplyJobRequest $request, string $id)
+    {
         // resume meta data extraction    
         $resumeFile = $request->file('resume_file');
         $resumeExtension = $resumeFile->getClientOriginalExtension();
@@ -49,27 +77,6 @@ class JobVacancyController extends Controller
                 'email' => auth()->guard()->user()->email
             ])
         ]);
-
-        JobApplication::create([
-            'jobVacancyId' => $id,
-            'userId' => auth()->guard()->user()->id,
-            'resumeId' => $resume->id,
-            'aiGeneratedScore' => 0,
-            'aiGeneratedFeedback' => '',
-        ]);
-
-        return redirect()->route('job-applications.index')->with('success', 'Your application has been submitted successfully.');
-    }
-
-    public function testOpenAI()
-    {
-        $response = OpenAI::chat()->create([
-            'model' => 'gpt-3.5-turbo', // or 'gpt-4'
-            'messages' => [
-                ['role' => 'user', 'content' => 'Hello!'],
-            ],
-        ]);
-
-        echo $response['choices'][0]['message']['content'];
+        return $resume->id;
     }
 }
