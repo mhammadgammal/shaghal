@@ -6,8 +6,11 @@ use App\Http\Requests\ApplyJobRequest;
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
+use App\Services\ResumeAnalysisService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
+
 class JobVacancyController extends Controller
 {
     public function show(string $id)
@@ -26,16 +29,18 @@ class JobVacancyController extends Controller
 
     public function processApplication(ApplyJobRequest $request, string $id)
     {
-        // resume meta data extraction    
+        // resume meta data extraction
         $resumeFile = $request->file('resume_file');
         $resumeExtension = $resumeFile->getClientOriginalExtension();
         $resumeOriginalName = $resumeFile->getClientOriginalName();
-        $resumePath = 'resume_'.time().'.'.$resumeExtension;
+        $resumePath = 'resume_' . time() . '.' . $resumeExtension;
 
         $path = $resumeFile->storeAs('resumes', $resumePath, 'cloud');
 
-        // $fileUrl = config('filesystems.disks.cloud.url').'/'.$path;
-
+        $fileUrl = config('filesystems.disks.cloud.url') . '/' . $path;
+        $resumeRawText = ResumeAnalysisService::extractTextFromCloudResume($fileUrl, 'resumes');
+        Log::debug('Extracted resume text: ' . strlen($resumeRawText) . ' characters.');
+        dd('');
         $resume = Resume::create([
             'filename' => $resumeOriginalName,
             'fileUri' => $path,
