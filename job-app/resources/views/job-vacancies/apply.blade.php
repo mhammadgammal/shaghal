@@ -49,24 +49,60 @@
                     <div class="mb-6">
                         <x-input-label for="resume" value="Select from your existing resumes" />
                         {{-- List of resumes --}}
+                        @if ($resumes->isEmpty())
+                            <p class="text-gray-400">You have no saved resumes.</p>
+                        @else
+                            <div class="space-y-2">
+                                @foreach ($resumes as $resume)
+                                    <div class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="resume_option" id="{{ $resume->id }}"
+                                            value="{{ $resume->id }}" class="form-radio text-blue-600"
+                                            @error('resume_option')
+                                                class="border-red-500"
+                                                @else
+                                                class="border-gray-300"
+                                            @enderror
+                                            {{ old('resume_option') == $resume->id ? 'checked' : '' }}>
+                                        <label for="{{ $resume->id }}"
+                                            class="text-white">{{ $resume->filename }}</label>
+                                        <span class="text-gray-500">
+                                            Last Updated: {{ $resume->updated_at->format('M d, Y') }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </div>
 
                 {{-- Upload new resume --}}
 
                 <div x-data="{ fileName: '', hasError: {{ $errors->has('resume_file') ? 'true' : 'false' }} }" class="mt-6">
-                    <x-input-label for="resume" value="Or Upload a New Resume" />
+
 
                     <div class="mb-6">
-                        <x-input-label for="new_resume" value="Upload New Resume (PDF, DOCX)" />
+                        <div class="flex flex-items space-x-2 mb-2">
+                            <input x-ref="newResumeRadio" type="radio" name="resume_option" id="new_resume"
+                                value="new_resume" class="form-radio text-blue-600"
+                                @error('resume_option')
+                                                class="border-red-500"
+                                                @else
+                                                class="border-gray-300"
+                                            @enderror
+                                {{ old('resume_option') == 'new_resume' ? 'checked' : '' }}>
+                            <x-input-label for="new_resume" value="Or Upload a New Resume (PDF, DOCX)" />
+                        </div>
                         <div class="flex items-center">
                             <div class="flex-1">
+
                                 <label for="new_resume_file" class="block text-white cursor-pointer">
                                     <div class="border-2 border-dashed border-gray-600 rounded-lg p-4 hover:border-blue-500 transition"
                                         :class="{ 'border-blue-500': fileName !== '', 'border-red-500': hasError }">
 
-                                        <input @change="fileName = $event.target.files[0].name" type="file"
-                                            name="resume_file" id="new_resume_file" class="hidden" accept=".pdf" />
+                                        <input
+                                            @change="fileName = $event.target.files[0].name; $refs.newResumeRadio.checked = true; hasError = false;"
+                                            type="file" name="resume_file" id="new_resume_file" class="hidden"
+                                            accept=".pdf" />
 
                                         <div class="text-center">
                                             <template x-if="fileName === ''">
