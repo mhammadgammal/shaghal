@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Services\OpenNetworkFileService;
+use App\Services\OpenAIBaseService;
+use Illuminate\Support\Facades\Log;
 
 abstract class ResumeAnalysisService
 {
@@ -61,5 +63,65 @@ abstract class ResumeAnalysisService
             'experience' => $data['experience'] ?? '',
             'education' => $data['education'] ?? '',
         ];
+    }
+
+    public static function analyzeResumeAgainstJobDescription($jobVacancy, $resumeData): array
+    {
+        try {
+            $jobDetails = json_encode([
+                'job_title' => $jobVacancy->title,
+                'job_description' => $jobVacancy->description,
+                'job_location' => $jobVacancy->location,
+                'job_type' => $jobVacancy->type,
+                'job_salary' => $jobVacancy->salary,
+            ]);
+
+            $resumeDetails = json_encode($resumeData);
+
+            $messages = [
+                [
+                    'role' => 'system',
+                    'content' => 'You are an expert job application analyzer. Compare the resume details against the job description and provide a score from 0 to 100 indicating how well the resume matches the job requirements. Additionally, provide constructive feedback on how the applicant can improve their resume to better fit the job description. Return the response in JSON format with keys: aiGeneratedScore, aiGeneratedFeedback.
+                    Aigenerate feedback should be detailed and specific to the job and the candidate\'s resume.',
+                ],
+                [
+                    'role' => 'user',
+                    'content' => "Job Details:\n$jobDetails\n\nResume Details:\n$resumeDetails",
+                ],
+            ];
+            $instance = new OpenAIBaseService();
+            $response = $instance->chat(messages: $messages, options: [
+                'response_format' => ['type' => 'json_object'],
+                'temperature' => 0.1,
+                'max_tokens' => 500,
+            ]);
+
+            Log::debug('OpenAI Response', ['response' => $response]);
+            $data = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+
+                Log::debug('JSON decode error', ['response' => $response]);
+
+                throw new \Exception('Failed to parse JSON response from OpenAI: ' . json_last_error_msg());
+            }
+
+            if (!isset($data['aiGeneratedScore']) || !isset($data['aiGeneratedFeedback'])) {
+                Log::debug('Missing fields in OpenAI response', ['response' => $data]);
+                throw new \Exception('Missing expected fields in OpenAI response.');
+            }
+
+
+            return [
+                'aiGeneratedScore' => $data['aiGeneratedScore'],
+                'aiGeneratedFeedback' => $data['aiGeneratedFeedback'],
+            ];
+        } catch (\Throwable $th) {
+            Log::error('Error analyzing resume against job description', ['error' => $th->getMessage()]);
+            return [
+                'aiGeneratedScore' => 0,
+                'aiGeneratedFeedback' => 'An error occurred while analyzing the resume.',
+            ];
+        }
     }
 }

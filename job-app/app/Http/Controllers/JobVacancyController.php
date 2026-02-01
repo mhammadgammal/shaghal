@@ -33,26 +33,26 @@ class JobVacancyController extends Controller
             ? $this->processNewResume($request, $id)
             : $request->input('resume_option');
 
+        $resume = Resume::findOrFail($resumeId);
+        $jobVacancy = JobVacancy::findOrFail($id);
+
+        $analysisResult = ResumeAnalysisService::analyzeResumeAgainstJobDescription(
+            $jobVacancy,
+            [
+                'skills' => $resume->skills,
+                'experience' => $resume->experience,
+                'education' => $resume->education,
+                'summary' => $resume->summary,
+            ]
+        );
         JobApplication::create([
             'jobVacancyId' => $id,
             'userId' => auth()->guard()->user()->id,
             'resumeId' => $resumeId,
-            'aiGeneratedScore' => 0,
-            'aiGeneratedFeedback' => '',
+            'aiGeneratedScore' => $analysisResult['aiGeneratedScore'],
+            'aiGeneratedFeedback' => $analysisResult['aiGeneratedFeedback'],
         ]);
         return redirect()->route('job-applications.index')->with('success', 'Your application has been submitted successfully.');
-    }
-
-    public function testOpenAI()
-    {
-        $response = OpenAI::chat()->create([
-            'model' => 'gpt-3.5-turbo', // or 'gpt-4'
-            'messages' => [
-                ['role' => 'user', 'content' => 'Hello!'],
-            ],
-        ]);
-
-        echo $response['choices'][0]['message']['content'];
     }
 
     private function processNewResume(ApplyJobRequest $request, string $id)
