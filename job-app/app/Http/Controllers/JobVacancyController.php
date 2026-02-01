@@ -66,17 +66,15 @@ class JobVacancyController extends Controller
         $path = $resumeFile->storeAs('resumes', $resumePath, 'cloud');
 
         $fileUrl = config('filesystems.disks.cloud.url') . '/' . $path;
-        $resumeRawText = ResumeAnalysisService::extractTextFromCloudResume($fileUrl, 'resumes');
-        Log::debug('Extracted resume text: ' . strlen($resumeRawText) . ' characters.');
-        dd('');
+        $resumeData = ResumeAnalysisService::getResumeInformation($fileUrl, 'resumes');
         $resume = Resume::create([
             'filename' => $resumeOriginalName,
             'fileUri' => $path,
             'userId' => auth()->guard()->user()->id,
-            'summary' => '',
-            'skills' => '',
-            'experience' => '',
-            'education' => '',
+            'summary' => $resumeData['summary'],
+            'skills' => $resumeData['skills'],
+            'experience' => $resumeData['experience'],
+            'education' => $resumeData['education'],
             'contactDetails' => json_encode([
                 'name' => auth()->guard()->user()->name,
                 'email' => auth()->guard()->user()->email
